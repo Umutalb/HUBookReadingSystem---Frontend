@@ -2,55 +2,57 @@
 const API_BASE = 'https://hubookreadingsystem-production.up.railway.app/api';
 const APP_VERSION = 'frontend-v1.0.3';
 
-// Session information
+// Oturum bilgileri
 let currentUser = { id: null, name: null, targetCount: null, currentRound: null };
 
-// Dynamic ID mappings (name -> id)
+// Dinamik ID eşlemeleri (isim -> id)
 let readerIdMap = { hazal: null, umut: null };
 
-// Hide protected pages immediately (even before parsing)
+// Protected sayfalar için hemen gizle (parsedan önce bile)
 (function() {
     const path = window.location.pathname.toLowerCase();
     if (path.includes('main.html') || path.includes('history.html') || 
         path.endsWith('/main') || path.endsWith('/history')) {
         
-        document.documentElement.style.background = 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #0f0f23 100%)';
-        document.documentElement.classList.add('pre-auth');
+    // Arka plan hazır olsun
+    document.documentElement.style.background = 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #0f0f23 100%)';
+    document.documentElement.classList.add('pre-auth');
     }
 })();
 
-// Page loading
+// Sayfa yükleme
 document.addEventListener('DOMContentLoaded', function() {
     const currentPage = getCurrentPage();
     if (currentPage === 'index') {
-        // Index page: no loading overlay, keep it visible
+        // Index sayfası için loading overlay kullanmıyoruz, görünür bırak
         document.documentElement.classList.remove('pre-auth');
         document.documentElement.classList.add('auth-ready');
         initLoginPage();
     } else {
-        // Protected pages: authentication required before showing content
+        // Protected pages: auth doğrulanana kadar overlay gösterilecek
         document.documentElement.classList.add('pre-auth');
         checkAuthAndInit();
     }
 });
 
-// Reauthenticate the session when returning from the back/forward cache
+// Back/forward cache'den (bfcache) dönüldüğünde oturumu tekrar doğrula
 window.addEventListener('pageshow', function() {
     const page = getCurrentPage();
     if (page === 'main' || page === 'history') {
-        document.documentElement.classList.add('pre-auth');
-        document.documentElement.classList.remove('auth-ready');
+    // Sadece sınıfları kullan
+    document.documentElement.classList.add('pre-auth');
+    document.documentElement.classList.remove('auth-ready');
         
         const overlay = document.getElementById('app-loading');
         if (overlay) overlay.classList.remove('fade-out');
         
-        // Authentication check
+        // Auth kontrolü - hızlı
         fetchCurrentSession().then(ok => {
             if (!ok) {
                 currentUser = { id: null, name: null };
                 window.location.replace('index.html');
             } else {
-                // Content loading + smooth display
+                // Content yüklenme bekle + smooth göster
                 authVisualDone();
             }
         });
@@ -58,11 +60,11 @@ window.addEventListener('pageshow', function() {
 });
 
 function getCurrentPage() {
-    // Try to detect via URL
+    // Önce URL üzerinden dene
     const path = window.location.pathname.toLowerCase();
     if (path.includes('main.html') || path.endsWith('/main') || path.endsWith('/main/')) return 'main';
     if (path.includes('history.html') || path.endsWith('/history') || path.endsWith('/history/')) return 'history';
-    // If URL doesn't match, detect via DOM markers (safer)
+    // URL tutmuyorsa DOM işaretçileri ile tespit et (daha güvenli)
     if (document.getElementById('history-content')) return 'history';
     if (document.getElementById('dashboard-content')) return 'main';
     return 'index';
@@ -76,7 +78,7 @@ function initLoginPage() {
 function checkAuthAndInit() {
     fetchCurrentSession().then(ok => {
         if (!ok) {
-            // No session, redirect to login
+            // Oturum yoksa geçmişte geri dönülebilir bir kayıt oluşturmadan login'e gönder
             window.location.replace('index.html');
             return;
         }
@@ -92,31 +94,31 @@ function checkAuthAndInit() {
     });
 }
 
-    function authVisualDone() {
-        // Content preparation for smooth transition
+function authVisualDone() {
+    // Yumuşak geçiş için content hazırlık + fade-in
     setTimeout(() => {
         const overlay = document.getElementById('app-loading');
         
-    // Smooth transition
+    // Class değişimi - smooth transition
     document.documentElement.classList.remove('pre-auth');
     document.documentElement.classList.add('auth-ready');
 
-    // Clear inline hiding if present
+    // Güvenlik: varsa inline gizleme temizle
     document.documentElement.style.visibility = '';
     document.documentElement.style.opacity = '';
     if (document.body) document.body.style.visibility = '';
         
-        // Overlay fade out
+        // Overlay yumuşak çıkış
         if (overlay) {
             overlay.classList.add('fade-out');
             setTimeout(() => { 
                 if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay); 
             }, 600);
         }
-    }, 200);
+    }, 200); // Kısa bekleme - content hazırlık
 }
 
-// Login page functions
+// Giriş sayfası fonksiyonları
 function loadReaderAvatars() {
     const hazal = document.getElementById('hazal-avatar');
     const umut = document.getElementById('umut-avatar');
@@ -134,7 +136,7 @@ function setupLoginEvents() {
     const selectedReaderInfo = document.getElementById('selected-reader-info');
     const errorMessage = document.getElementById('error-message');
 
-    // Exit safely if login page elements are not present
+    // Eğer login sayfası elementleri yoksa (yanlış tespit) güvenli çık
     if (!loginForm || !pinModal) return;
 
     readerCards.forEach(card => {
@@ -144,7 +146,7 @@ function setupLoginEvents() {
 
             currentUser.id = parseInt(readerId);
 
-            selectedReaderInfo.textContent = `${readerName} you are logging in as`;
+            selectedReaderInfo.textContent = `${readerName} olarak giriş yapıyorsunuz`;
             nameInput.value = readerName;
             pinModal.style.display = 'flex';
             nameInput.focus();
@@ -178,22 +180,24 @@ async function attemptLogin() {
     const pin = pinInput.value.trim();
 
     if (!name) {
-        errorMessage.textContent = 'Name is required.';
+        errorMessage.textContent = 'İsim gereklidir.';
         nameInput.focus();
         return;
     }
 
     if (!pin || pin.length < 4) {
-        errorMessage.textContent = 'PIN must be at least 4 digits long.';
+        errorMessage.textContent = 'PIN en az 4 haneli olmalıdır.';
         pinInput.focus();
         return;
     }
 
     currentUser.name = name;
     const payload = { name, pin };
+    // debug kaldırıldı
 
     try {
         const loginResp = await apiCall('POST', '/Account/login', payload);
+    // debug kaldırıldı
         currentUser = { 
             id: loginResp.id, 
             name: loginResp.name,   
@@ -203,19 +207,19 @@ async function attemptLogin() {
         window.location.href = 'main.html';
     } catch (error) {
         if (error.status === 401) {
-            errorMessage.textContent = 'Invalid information!';
+            errorMessage.textContent = 'Geçersiz bilgiler!';
         } else if (error.status === 400) {
-            errorMessage.textContent = 'Please check your information.';
+            errorMessage.textContent = 'Bilgileri kontrol edin.';
         } else {
-            errorMessage.textContent = 'Server error. Please try again.';
+            errorMessage.textContent = 'Sunucu hatası. Tekrar deneyin.';
         }
         pinInput.focus();
     }
 }
 
-// Main page functions
+// Ana sayfa fonksiyonları
 function initMainPage() {
-    // Set avatars immediately to prevent empty display
+    // Avatarlar başlangıçta boş görünmesin diye hemen ayarla
     try { loadReaderAvatars(); } catch(_) {}
     loadAllUsersData();
     setupMainPageEvents();
@@ -230,46 +234,50 @@ async function loadAllUsersData() {
             if (key === 'hazal') readerIdMap.hazal = r.id;
             if (key === 'umut') readerIdMap.umut = r.id;
         });
-
+        
+    // debug kaldırıldı
         if (readerIdMap.hazal) {
+            // debug kaldırıldı
             await loadUserData(readerIdMap.hazal, 'hazal');
         } else {
             console.warn('readerIdMap.hazal is missing!');
         }
         if (readerIdMap.umut) {
+            // debug kaldırıldı
             await loadUserData(readerIdMap.umut, 'umut');
         } else {
             console.warn('readerIdMap.umut is missing!');
         }
     } catch (err) {
-        console.error('User list could not be loaded:', err);
+        console.error('Kullanıcı listesi yüklenemedi:', err);
     }
 }
 
 async function loadUserData(userId, userPrefix) {
-
+    // debug kaldırıldı
+    
     try {
-        // Load statistics
+        // İstatistikleri yükle
         const stats = await apiCall('GET', `/Readers/${userId}/stats`);
         document.getElementById(`${userPrefix}-target`).textContent = stats.target;
         document.getElementById(`${userPrefix}-done`).textContent = stats.done;
         document.getElementById(`${userPrefix}-remaining`).textContent = stats.remaining;
         document.getElementById(`${userPrefix}-progress`).textContent = `${stats.progressPct}%`;
-
-        // Update the progress bar
+        
+        // İlerleme çubuğunu güncelle
         const progressFill = document.getElementById(`${userPrefix}-progress-bar`);
         if (progressFill) progressFill.style.width = `${stats.progressPct}%`;
 
-        // Use static avatar
+        // Statik avatar kullan
         const avatarImg = document.getElementById(`${userPrefix}-avatar`);
         if (avatarImg) avatarImg.src = userPrefix === 'hazal' ? 'images/Hazal.jpg' : 'images/Umut.jpeg';
-
-        // Load books
+        
+        // Kitapları yükle
         const books = await apiCall('GET', `/readers/${userId}/items`);
         const booksContainer = document.getElementById(`${userPrefix}-books`);
 
         if (books.length === 0) {
-            booksContainer.innerHTML = '<div class="no-data"><p>No books found yet.</p></div>';
+            booksContainer.innerHTML = '<div class="no-data"><p>Henüz kitap bulunmuyor.</p></div>';
             return;
         }
 
@@ -359,7 +367,7 @@ function setupMainPageEvents() {
 
         } catch (error) {
             const errorDiv = document.getElementById('update-error-message');
-            errorDiv.textContent = 'Update error: ' + (error.message || 'Unknown error');
+            errorDiv.textContent = 'Güncelleme hatası: ' + (error.message || 'Bilinmeyen hata');
         }
     });
 
@@ -488,7 +496,7 @@ function setupMainPageEvents() {
     });
 }
 
-// Add book function
+// Kitap ekleme fonksiyonu
 async function addBook(readerId, title, startedAt = null) {
     if (!currentUser.id) { 
         showInfoModal('warning', 'Giriş Gerekli', 'Lütfen önce giriş yapın!');
@@ -505,7 +513,7 @@ async function addBook(readerId, title, startedAt = null) {
 
     try {
         const response = await apiCall('POST', `/ReadingItems/${readerId}`, body);
-    // debugging has been removed
+    // debug kaldırıldı
         return response;
     } catch (error) {
         console.error('Kitap ekleme hatası:', error);
@@ -513,10 +521,10 @@ async function addBook(readerId, title, startedAt = null) {
     }
 }
 
-// Global functions - will be called from HTML
+// Global fonksiyonlar - HTML'den çağrılacak
 window.updateProfile = async function() {
     if (!currentUser.id) {
-        showInfoModal('warning', 'Session Error', 'Session not found. Please log in again.');
+        showInfoModal('warning', 'Oturum Hatası', 'Oturum bulunamadı. Lütfen yeniden giriş yapın.');
         return;
     }
     try {
