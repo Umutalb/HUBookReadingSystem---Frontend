@@ -91,3 +91,7 @@ typings/
 *.png
 *.jpg
 *.jpeg
+*.svg
+
+# CScode
+.vscode/
