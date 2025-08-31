@@ -86,3 +86,8 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+# Ignore all PNG and JPEG images
+*.png
+*.jpg
+*.jpeg
