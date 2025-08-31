@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr" class="pre-auth" style="background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #0f0f23 100%) !important;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <!-- Korumalı sayfa: arama motorları indekslemesin -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0f0f23">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f0f23">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-TileColor" content="#0f0f23">
+    <title>Arşiv - Hazal & Umut Kütüphanesi</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="dist/output.css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-dark-bg library-bg min-h-screen text-dark-text" style="background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #0f0f23 100%) !important;">
+    <div id="app-loading" class="loading-overlay"><div class="spinner" aria-hidden="true"></div><span class="loading-text">Arşiv yükleniyor...</span></div>
+    <div class="bg-dark-container border-b border-dark-border app-header">
+        <div class="flex items-center justify-between p-4 max-w-7xl mx-auto">
+            <h1 class="library-heading header-bookshelf text-xl font-semibold tracking-tight text-dark-text">Kütüphane Yönetim Sistemi</h1>
+            <div class="flex items-center gap-3 shrink-0">
+                <img id="current-user-avatar" src="" alt="Avatar" class="w-8 h-8 rounded-full object-cover border border-dark-border-light">
+                <span id="current-user-name" class="text-dark-text font-medium"></span>
+                <button id="logout-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm font-medium transition-colors">Çıkış</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bg-dark-container border-b border-dark-border app-nav">
+        <div class="flex max-w-7xl mx-auto">
+            <a href="main.html" class="px-6 py-3 text-dark-text-secondary hover:text-dark-text hover:bg-dark-card transition-colors border-b-2 border-transparent">Ana Sayfa</a>
+            <a href="history.html" class="px-6 py-3 text-dark-text border-b-2 border-accent-blue bg-dark-card">Geçmiş</a>
+        </div>
+    </nav>
+
+    <main id="history-content" class="p-6 max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+            <div>
+                <h2 class="text-2xl font-semibold tracking-tight">Kütüphane Arşivi</h2>
+                <p class="text-sm text-dark-text-secondary mt-1">Tamamlanan okuma geçmişini görüntüleyin</p>
+            </div>
+            <label class="inline-flex items-center gap-2 text-sm cursor-pointer select-none bg-dark-card border border-dark-border-light rounded px-3 py-2">
+                <input type="checkbox" id="only-done-filter" checked class="accent-accent-blue w-4 h-4">
+                <span class="text-dark-text">Sadece tamamlananları göster</span>
+            </label>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Hazal Geçmişi -->
+            <section class="bg-dark-container border border-dark-border rounded-lg p-6">
+                <header class="text-center mb-6 pb-4 border-b border-dark-border">
+                    <img id="hazal-avatar" src="images/Hazal.jpg" alt="Hazal" class="w-16 h-16 rounded-full object-cover border-2 border-dark-border-light mx-auto mb-3">
+                    <h2 class="text-xl font-semibold mb-1">Hazal</h2>
+                    <p class="text-sm text-dark-text-secondary italic">Sevgilim ❤️</p>
+                </header>
+                <h3 class="text-center font-medium mb-4">📜 Arşiv</h3>
+                <div id="hazal-history" class="max-h-96 overflow-y-auto custom-scrollbar">
+                    <!-- Hazal geçmiş -->
+                </div>
+                <div id="hazal-no-history" class="no-data" style="display:none;">
+                    <p>Henüz geçmiş bulunmuyor.</p>
+                </div>
+            </section>
+
+            <!-- Umut Geçmişi -->
+            <section class="bg-dark-container border border-dark-border rounded-lg p-6">
+                <header class="text-center mb-6 pb-4 border-b border-dark-border">
+                    <img id="umut-avatar" src="images/Umut.jpeg" alt="Umut" class="w-16 h-16 rounded-full object-cover border-2 border-dark-border-light mx-auto mb-3">
+                    <h2 class="text-xl font-semibold mb-1">Umut</h2>
+                    <p class="text-sm text-dark-text-secondary italic">Ben 📚</p>
+                </header>
+                <h3 class="text-center font-medium mb-4">📜 Arşiv</h3>
+                <div id="umut-history" class="max-h-96 overflow-y-auto custom-scrollbar">
+                    <!-- Umut geçmiş -->
+                </div>
+                <div id="umut-no-history" class="no-data" style="display:none;">
+                    <p>Henüz geçmiş bulunmuyor.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="script.js?v=1.0.3"></script>
+</body>
+</html>

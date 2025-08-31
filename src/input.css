@@ -1,0 +1,5 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom layer (porting existing styles.css minimal pieces later if desired) */

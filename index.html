@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hazal & Umut Kütüphanesi - Ortak okuma turları, hedefler ve kitap ilerlemeleri.">
+    <meta name="color-scheme" content="dark">
+    <!-- Mobile browser UI colors -->
+    <meta name="theme-color" content="#0f0f23">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f0f23">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-TileColor" content="#0f0f23">
+    <title>Hazal & Umut Kütüphanesi</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="dist/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Unified custom minimal styles -->
+    <link rel="stylesheet" href="styles.css">
+ </head>
+ <body class="bg-dark-bg library-bg min-h-screen flex items-center justify-center p-4 text-dark-text">
+     <div class="w-full max-w-4xl">
+    <header class="mb-8 text-center">
+        <h1 class="library-heading header-bookshelf text-3xl md:text-4xl font-bold text-dark-text tracking-tight" id="site-title">Hazal & Umut Kütüphanesi</h1>
+    </header>
+    <main id="main-content">
+        <div class="flex flex-col md:flex-row gap-6 justify-center items-stretch" aria-labelledby="site-title">
+            <div class="bg-dark-container border border-dark-border rounded-lg p-6 text-center min-w-[230px] flex-1 cursor-pointer hover:bg-dark-card hover:border-dark-border-light hover:shadow-lg/10 transition-all reader-card focus:outline-none focus:ring-2 focus:ring-accent-blue" data-reader-id="1" data-reader-name="Hazal" tabindex="0">
+                <div class="mb-4">
+                    <img id="hazal-avatar" src="images/Hazal.jpg" alt="Hazal" class="w-20 h-20 rounded-full object-cover border-2 border-dark-border-light mx-auto shadow-sm">
+                </div>
+                <h2 class="text-xl font-semibold text-dark-text mb-1">Hazal</h2>
+                <p class="text-sm text-dark-text-secondary italic"></p>
+                <span class="inline-block mt-3 px-3 py-1 rounded-full text-[11px] tracking-wide bg-dark-card border border-dark-border-light text-dark-text-secondary">Click to login</span>
+            </div>
+            
+            <div class="bg-dark-container border border-dark-border rounded-lg p-6 text-center min-w-[230px] flex-1 cursor-pointer hover:bg-dark-card hover:border-dark-border-light hover:shadow-lg/10 transition-all reader-card focus:outline-none focus:ring-2 focus:ring-accent-blue" data-reader-id="2" data-reader-name="Umut" tabindex="0">
+                <div class="mb-4">
+                    <img id="umut-avatar" src="images/Umut.jpeg" alt="Umut" class="w-20 h-20 rounded-full object-cover border-2 border-dark-border-light mx-auto shadow-sm">
+                </div>
+                <h2 class="text-xl font-semibold text-dark-text mb-1">Umut</h2>
+                <p class="text-sm text-dark-text-secondary italic"></p>
+                <span class="inline-block mt-3 px-3 py-1 rounded-full text-[11px] tracking-wide bg-dark-card border border-dark-border-light text-dark-text-secondary">Click to login</span>
+            </div>
+        </div>
+    </main>
+    <footer class="mt-12 text-center text-sm text-dark-text-secondary">
+        Umut Albayrak © 2025 Tüm hakları saklıdır.
+    </footer>
+    </div><!-- /wrapper -->
+
+    <div id="pin-modal" class="fixed inset-0 bg-dark-bg/90 modal-backdrop z-50 hidden items-center justify-center p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="pin-modal-title">
+        <div class="bg-dark-container border border-dark-border-light rounded-xl p-6 pt-8 text-center max-w-sm w-full shadow-2xl">
+            <div class="mx-auto mb-4 bg-gradient-to-br from-accent-blue/20 to-transparent rounded-full p-2 border border-dark-border-light w-16 h-16 flex items-center justify-center">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-dark-card border border-dark-border text-xl" aria-hidden="true">🔒</div>
+            </div>
+            <h3 id="pin-modal-title" class="text-xl font-semibold text-dark-text mb-2 tracking-tight">Library Login</h3>
+            <p id="selected-reader-info" class="text-sm text-dark-text-secondary italic mb-4"></p>
+            <form id="login-form" aria-describedby="selected-reader-info">
+                <label for="name-input" class="block text-left text-dark-text font-medium mb-1 text-xs uppercase tracking-wide">İsim</label>
+                <input type="text" id="name-input" placeholder="Enter your name" required class="w-full p-3 text-sm border border-dark-border-light rounded bg-dark-card text-dark-text text-center mb-4 focus-accent placeholder-dark-text-secondary/40">
+                
+                <label for="pin-input" class="block text-left text-dark-text font-medium mb-1 text-xs uppercase tracking-wide">PIN</label>
+                <input type="password" id="pin-input" placeholder="4-6 digit PIN" maxlength="6" required class="w-full p-3 text-sm border border-dark-border-light rounded bg-dark-card text-dark-text text-center mb-6 tracking-widest focus-accent placeholder-dark-text-secondary/40">
+                
+                <div class="flex gap-2 justify-center">
+                    <button type="submit" id="login-btn" class="px-5 py-2.5 bg-green-600 hover:bg-green-500/90 active:scale-[.98] text-white rounded-md text-sm font-medium transition-all shadow-sm">📖 Enter</button>
+                    <button type="button" id="cancel-btn" class="px-5 py-2.5 bg-red-600 hover:bg-red-500/90 active:scale-[.98] text-white rounded-md text-sm font-medium transition-all shadow-sm">❌ Cancel</button>
+                </div>
+            </form>
+            <div id="error-message" class="text-red-400 mt-3 text-xs min-h-[16px]" role="alert" aria-live="polite"></div>
+        </div>
+    </div>
+    <script src="script.js?v=1.0.3"></script>
+ </body>
+</html>

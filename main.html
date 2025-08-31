@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="tr" class="pre-auth" style="background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #0f0f23 100%) !important;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <!-- Korumalı sayfa: arama motorları indekslemesin -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0f0f23">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f0f23">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-TileColor" content="#0f0f23">
+    <title>Ana Sayfa - Hazal & Umut Kütüphanesi</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="dist/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Corrected stylesheet reference (was styles-new.css which was removed) -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-dark-bg library-bg min-h-screen" style="background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #0f0f23 100%) !important;">
+    <div id="app-loading" class="loading-overlay"><div class="spinner" aria-hidden="true"></div><span class="loading-text">Loading books...</span></div>
+    <div class="main-container">
+        <header class="bg-dark-container border-b border-dark-border app-header">
+            <div class="flex items-center justify-between p-4 max-w-7xl mx-auto">
+                <h1 class="library-heading header-bookshelf text-xl font-semibold tracking-tight text-dark-text">Library Management System</h1>
+                <div class="flex items-center gap-3 shrink-0">
+                    <img id="current-user-avatar" src="" alt="Avatar" class="w-8 h-8 rounded-full object-cover border border-dark-border-light">
+                    <span id="current-user-name" class="text-dark-text font-medium"></span>
+                    <button id="logout-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm font-medium transition-colors">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <nav class="bg-dark-container border-b border-dark-border app-nav">
+            <div class="flex max-w-7xl mx-auto">
+                <a href="main.html" class="px-6 py-3 text-dark-text border-b-2 border-accent-blue bg-dark-card">Home</a>
+                <a href="history.html" class="px-6 py-3 text-dark-text-secondary hover:text-dark-text hover:bg-dark-card transition-colors border-b-2 border-transparent">History</a>
+            </div>
+        </nav>
+
+        <main id="dashboard-content" class="p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+                
+                <!-- Sol Taraf - Hazal -->
+                <div class="bg-dark-container border border-dark-border rounded-lg p-6">
+                    <!-- Hazal Header -->
+                    <div class="text-center mb-6 pb-4 border-b border-dark-border">
+                        <img id="hazal-avatar" src="images/Hazal.jpg" alt="Hazal" class="w-16 h-16 rounded-full object-cover border-2 border-dark-border-light mx-auto mb-3">
+                        <h2 class="text-xl font-semibold text-dark-text mb-1">Hazal</h2>
+                        <p class="text-sm text-dark-text-secondary italic"></p>
+                        
+                        <div class="reader-actions mt-4 flex gap-3 justify-center flex-wrap" id="hazal-actions" style="display: none;">
+                            <button class="px-4 py-2 bg-dark-card border border-dark-border-light rounded text-sm text-dark-text hover:bg-dark-border transition-colors font-medium" data-ui-action="update-profile">Update Profile</button>
+                            <button class="px-4 py-2 bg-dark-card border border-dark-border-light rounded text-sm text-dark-text hover:bg-dark-border transition-colors font-medium" data-ui-action="open-add-book">📚 Add Book</button>
+                            <button class="px-4 py-2 bg-dark-card border border-dark-border-light rounded text-sm text-dark-text hover:bg-dark-border transition-colors font-medium" data-ui-action="increase-round">🔁 Increase Round</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Hazal Stats -->
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div class="bg-dark-card border border-dark-border rounded p-3 text-center">
+                            <h4 class="text-xs text-dark-text-secondary uppercase font-medium mb-1">Target</h4>
+                            <p class="text-lg font-semibold text-dark-text" id="hazal-target">-</p>
+                        </div>
+                        <div class="bg-dark-card border border-dark-border rounded p-3 text-center">
+                            <h4 class="text-xs text-dark-text-secondary uppercase font-medium mb-1">Completed</h4>
+                            <p class="text-lg font-semibold text-dark-text" id="hazal-done">-</p>
+                        </div>
+                        <div class="bg-dark-card border border-dark-border rounded p-3 text-center">
+                            <h4 class="text-xs text-dark-text-secondary uppercase font-medium mb-1">Remaining</h4>
+                            <p class="text-lg font-semibold text-dark-text" id="hazal-remaining">-</p>
+                        </div>
+                        <div class="bg-dark-card border border-dark-border rounded p-3 text-center">
+                            <h4 class="text-xs text-dark-text-secondary uppercase font-medium mb-1">Progress</h4>
+                            <p class="text-lg font-semibold text-dark-text" id="hazal-progress">-%</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Hazal Progress Bar -->
+                    <div class="mb-6">
+                        <div class="text-center mb-2">
+                            <span class="text-xs text-dark-text-secondary font-medium">📊 Progress</span>
+                        </div>
+                        <div class="w-full h-2 bg-dark-card border border-dark-border rounded-sm overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-accent-blue to-blue-500 rounded-sm transition-all duration-300 progress-animation" id="hazal-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hazal Books -->
+                    <div class="mb-4">
+                        <h3 class="text-center text-dark-text font-semibold mb-3">📚 Current Books</h3>
+                        <div class="max-h-60 overflow-y-auto custom-scrollbar" id="hazal-books">
+                            <!-- Books will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sağ Taraf - Umut -->
+                <div class="bg-dark-container border border-dark-border rounded-lg p-6">
+                    <!-- Umut Header -->
+                    <div class="text-center mb-6 pb-4 border-b border-dark-border">
+                        <img id="umut-avatar" src="images/Umut.jpeg" alt="Umut" class="w-16 h-16 rounded-full object-cover border-2 border-dark-border-light mx-auto mb-3">
+                        <h2 class="text-xl font-semibold text-dark-text mb-1">Umut</h2>
+                        <p class="text-sm text-dark-text-secondary italic"></p>
+                        
+                        <div class="reader-actions mt-4 flex gap-3 justify-center flex-wrap" id="umut-actions" style="display: none;">
+                            <button class="px-4 py-2 bg-dark-card border border-dark-border-light rounded text-sm text-dark-text hover:bg-dark-border transition-colors font-medium" data-ui-action="update-profile">Update Profile</button>
+                            <button class="px-4 py-2 bg-dark-card border border-dark-border-light rounded text-sm text-dark-text hover:bg-dark-border transition-colors font-medium" data-ui-action="open-add-book">📚 Add Book</button>
+                            <button class="px-4 py-2 bg-dark-card border border-dark-border-light rounded text-sm text-dark-text hover:bg-dark-border transition-colors font-medium" data-ui-action="increase-round">🔁 Increase Round</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Umut Stats -->
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div class="bg-dark-card border border-dark-border rounded p-3 text-center">
+                            <h4 class="text-xs text-dark-text-secondary uppercase font-medium mb-1">Target</h4>
+                            <p class="text-lg font-semibold text-dark-text" id="umut-target">-</p>
+                        </div>
+                        <div class="bg-dark-card border border-dark-border rounded p-3 text-center">
+                            <h4 class="text-xs text-dark-text-secondary uppercase font-medium mb-1">Completed</h4>
+                            <p class="text-lg font-semibold text-dark-text" id="umut-done">-</p>
+                        </div>
+                        <div class="bg-dark-card border border-dark-border rounded p-3 text-center">
+                            <h4 class="text-xs text-dark-text-secondary uppercase font-medium mb-1">Remaining</h4>
+                            <p class="text-lg font-semibold text-dark-text" id="umut-remaining">-</p>
+                        </div>
+                        <div class="bg-dark-card border border-dark-border rounded p-3 text-center">
+                            <h4 class="text-xs text-dark-text-secondary uppercase font-medium mb-1">Progress</h4>
+                            <p class="text-lg font-semibold text-dark-text" id="umut-progress">-%</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Umut Progress Bar -->
+                    <div class="mb-6">
+                        <div class="text-center mb-2">
+                            <span class="text-xs text-dark-text-secondary font-medium">📊 Progress</span>
+                        </div>
+                        <div class="w-full h-2 bg-dark-card border border-dark-border rounded-sm overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-accent-blue to-blue-500 rounded-sm transition-all duration-300 progress-animation" id="umut-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Umut Books -->
+                    <div class="mb-4">
+                        <h3 class="text-center text-dark-text font-semibold mb-3">📚 Current Books</h3>
+                        <div class="max-h-60 overflow-y-auto custom-scrollbar" id="umut-books">
+                            <!-- Books will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </main>
+
+    <!-- Modals stay persistent outside dynamic root -->
+    <!-- Add Book Modal -->
+        <div id="add-book-modal" class="fixed inset-0 bg-dark-bg bg-opacity-80 modal-backdrop z-50 hidden items-center justify-center p-4">
+            <div class="bg-dark-container border border-dark-border rounded-lg p-6 max-w-md w-full">
+                <h3 class="text-lg font-semibold text-dark-text mb-4 text-center">📚 Add New Book</h3>
+                <form id="add-book-form">
+                    <label for="book-title-input" class="block text-sm font-medium text-dark-text mb-2">Book Title:</label>
+                    <input type="text" id="book-title-input" placeholder="Enter book title..." maxlength="200" required 
+                           class="w-full p-3 border border-dark-border-light rounded bg-dark-card text-dark-text mb-4 focus-accent">
+                    
+                    <label for="book-start-date-input" class="block text-sm font-medium text-dark-text mb-2">Start Date (Optional):</label>
+                    <input type="date" id="book-start-date-input" 
+                           class="w-full p-3 border border-dark-border-light rounded bg-dark-card text-dark-text mb-6 focus-accent">
+                    
+                    <div class="flex gap-3 justify-center">
+                        <button type="submit" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded font-medium transition-colors">
+                            ➕ Add Book
+                        </button>
+                        <button type="button" class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded font-medium transition-colors" data-ui-action="close-add-book-modal">
+                            ❌ Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Book Modal -->
+        <div id="edit-book-modal" class="fixed inset-0 bg-dark-bg bg-opacity-80 modal-backdrop z-50 hidden items-center justify-center p-4">
+            <div class="bg-dark-container border border-dark-border rounded-lg p-6 max-w-md w-full">
+                <h3 class="text-lg font-semibold text-dark-text mb-4 text-center">✏️ Edit Book</h3>
+                <form id="edit-book-form">
+                    <input type="hidden" id="edit-book-id">
+                    <label for="edit-book-title" class="block text-sm font-medium text-dark-text mb-2">Book Title:</label>
+                    <input type="text" id="edit-book-title" maxlength="200" required class="w-full p-3 border border-dark-border-light rounded bg-dark-card text-dark-text mb-4 focus-accent">
+                    <label for="edit-book-start-date" class="block text-sm font-medium text-dark-text mb-2">Start Date (Optional):</label>
+                    <input type="date" id="edit-book-start-date" class="w-full p-3 border border-dark-border-light rounded bg-dark-card text-dark-text mb-6 focus-accent">
+                    <div class="flex gap-3 justify-center">
+                        <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition-colors">Save</button>
+                        <button type="button" class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded font-medium transition-colors" data-ui-action="close-edit-book-modal">Cancel</button>
+                    </div>
+                </form>
+                <div id="edit-book-error" class="text-red-400 mt-2 text-sm text-center"></div>
+            </div>
+        </div>
+
+        <!-- Profil Güncelleme Modal -->
+        <div id="update-modal" class="fixed inset-0 bg-dark-bg bg-opacity-80 modal-backdrop z-50 hidden items-center justify-center p-4">
+            <div class="bg-dark-container border border-dark-border rounded-lg p-6 max-w-md w-full">
+                <h3 class="text-lg font-semibold text-dark-text mb-4 text-center">Profil Güncelle</h3>
+                <form id="update-form">
+                    <label for="new-name" class="block text-sm font-medium text-dark-text mb-2">İsim:</label>
+                    <input type="text" id="new-name" name="name" 
+                           class="w-full p-3 border border-dark-border-light rounded bg-dark-card text-dark-text mb-4 focus-accent">
+                    
+                    <label for="new-target" class="block text-sm font-medium text-dark-text mb-2">Hedef Kitap Sayısı:</label>
+                    <input type="number" id="new-target" name="targetCount" min="1" 
+                           class="w-full p-3 border border-dark-border-light rounded bg-dark-card text-dark-text mb-4 focus-accent">
+                    
+                    <label for="new-round" class="block text-sm font-medium text-dark-text mb-2">Mevcut Tur:</label>
+                    <input type="number" id="new-round" name="currentRound" min="1" 
+                           class="w-full p-3 border border-dark-border-light rounded bg-dark-card text-dark-text mb-6 focus-accent">
+                    
+                    <div class="flex gap-3 justify-center">
+                        <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition-colors">
+                            Güncelle
+                        </button>
+                        <button type="button" id="close-update-modal" class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded font-medium transition-colors">
+                            İptal
+                        </button>
+                    </div>
+                </form>
+                <div id="update-error-message" class="text-red-400 mt-2 text-sm text-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Round Artırma Onay Modal -->
+    <div id="round-confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-dark-card border border-dark-border-light rounded-lg p-6 max-w-md mx-4 shadow-xl">
+            <div class="text-center">
+                <div class="w-16 h-16 mx-auto mb-4 bg-blue-600/20 rounded-full flex items-center justify-center">
+                    <span class="text-2xl">🔁</span>
+                </div>
+                <h3 class="text-lg font-semibold text-dark-text mb-2">Round Artırılsın mı?</h3>
+                <p class="text-sm text-dark-text-secondary mb-6">Bu işlem geri alınamaz. Mevcut tur sayısı bir artırılacak.</p>
+                
+                <div class="flex gap-3 justify-center">
+                    <button id="round-confirm-yes" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition-colors">
+                        Evet, Artır
+                    </button>
+                    <button id="round-confirm-no" class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded font-medium transition-colors">
+                        İptal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kitap Silme Onay Modal -->
+    <div id="delete-confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-dark-card border border-dark-border-light rounded-lg p-6 max-w-md mx-4 shadow-xl">
+            <div class="text-center">
+                <div class="w-16 h-16 mx-auto mb-4 bg-red-600/20 rounded-full flex items-center justify-center">
+                    <span class="text-2xl">🗑️</span>
+                </div>
+                <h3 class="text-lg font-semibold text-dark-text mb-2">Kitabı Sil</h3>
+                <p id="delete-book-title" class="text-sm text-dark-text-secondary mb-2 font-medium"></p>
+                <p class="text-sm text-dark-text-secondary mb-6">Bu kitap kalıcı olarak silinecek. Bu işlem geri alınamaz.</p>
+                
+                <div class="flex gap-3 justify-center">
+                    <button id="delete-confirm-yes" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-medium transition-colors">
+                        Evet, Sil
+                    </button>
+                    <button id="delete-confirm-no" class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded font-medium transition-colors">
+                        İptal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Genel Bilgi/Hata Modal -->
+    <div id="info-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-dark-card border border-dark-border-light rounded-lg p-6 max-w-md mx-4 shadow-xl">
+            <div class="text-center">
+                <div id="info-modal-icon" class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center">
+                    <!-- Icon will be set dynamically -->
+                </div>
+                <h3 id="info-modal-title" class="text-lg font-semibold text-dark-text mb-2"></h3>
+                <p id="info-modal-message" class="text-sm text-dark-text-secondary mb-6"></p>
+                
+                <button id="info-modal-ok" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition-colors">
+                    Tamam
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Round Artırma Sonuç Modal -->
+    <div id="round-result-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-dark-card border border-dark-border-light rounded-lg p-6 max-w-md mx-4 shadow-xl">
+            <div class="text-center">
+                <div id="round-result-icon" class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center">
+                    <!-- Icon will be set dynamically -->
+                </div>
+                <h3 id="round-result-title" class="text-lg font-semibold text-dark-text mb-2"></h3>
+                <p id="round-result-message" class="text-sm text-dark-text-secondary mb-6"></p>
+                
+                <button id="round-result-ok" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition-colors">
+                    Tamam
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js?v=1.0.3"></script>
+</body>
+</html>

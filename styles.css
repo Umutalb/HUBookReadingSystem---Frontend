@@ -1,0 +1,285 @@
+/* Minimal Custom CSS - Tailwind ile birlikte kullanım için */
+/* Sabit scrollbar genişliği (sayfalar arası sağa kaymayı engelle) */
+html { scrollbar-gutter: stable; }
+body { overflow-y: scroll; }
+
+/* Page fade effect (full reload yumuşatma) */
+body.page-fade { opacity:0; animation:pageFade .35s ease forwards; }
+@keyframes pageFade { to { opacity:1; } }
+
+/* Smooth transitions for all elements */
+* {
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+}
+
+body.library-bg::before {
+    /* Hafif noise / doku katmanı */
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 25% 20%, rgba(255,255,255,0.04), transparent 60%),
+        radial-gradient(circle at 80% 40%, rgba(255,255,255,0.035), transparent 65%),
+        radial-gradient(circle at 40% 75%, rgba(255,255,255,0.03), transparent 60%);
+    mix-blend-mode: normal;
+    opacity: .55;
+    z-index: 0;
+}
+
+/* Global loading overlay (auth / page init) - HEMEN GÖRÜNÜR */
+.loading-overlay { 
+    position:fixed !important; 
+    inset:0 !important; 
+    display:flex !important; 
+    align-items:center !important; 
+    justify-content:center !important; 
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #0f0f23 100%) !important;
+    z-index:9999 !important; 
+    gap:1rem; 
+    font-size:.9rem; 
+    font-weight:500; 
+    color:#d2d5f9; 
+    letter-spacing:.5px; 
+    opacity:1; 
+    visibility:visible;
+    backdrop-filter: blur(8px);
+}
+.loading-overlay .spinner { 
+    width:38px; 
+    height:38px; 
+    border:4px solid #2a2b36; 
+    border-top-color:#5C6FFF; 
+    border-radius:50%; 
+    animation:spin 0.9s linear infinite; 
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-overlay.fade-out { animation:smoothFadeOut .6s ease forwards; }
+@keyframes smoothFadeOut { 
+    0% { opacity:1; transform:scale(1); }
+    50% { opacity:0.8; transform:scale(1.02); }
+    100% { opacity:0; visibility:hidden; transform:scale(0.98); } 
+}
+
+/* SAYFA GEÇİŞİ - YUMUŞAK FADE SİSTEMİ */
+html { 
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s ease;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #0f0f23 100%) !important;
+}
+
+/* Body için de aynı gradient - hiç siyah ekran gösterme */
+body {
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #0f0f23 100%) !important;
+    min-height: 100vh;
+}
+
+/* Tüm sayfayı değil sadece içerik bloklarını yöneteceğiz */
+/* Indicator classes retained for JS logic (no direct styles needed) */
+
+/* Yalnızca ana container ve header fade */
+html.pre-auth .main-container, html.pre-auth .app-header { 
+    opacity:0; 
+    filter:blur(2px);
+    transition: opacity .4s ease, filter .4s ease;
+}
+html.auth-ready .main-container, html.auth-ready .app-header { 
+    opacity:1; 
+    filter:none; 
+}
+
+/* Çok güçlü gizleme - inline style override */
+/* Aşırı agresif global gizleme kaldırıldı */
+html[style*="visibility: hidden"] .loading-overlay { 
+    visibility: visible !important; 
+    opacity: 1 !important; 
+}
+
+/* Bookshelf style header underline */
+.header-bookshelf {
+    position: relative;
+}
+.header-bookshelf::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 4px;
+    background: repeating-linear-gradient(90deg,#2A2B36 0 110px,#3A3B46 110px 112px);
+    box-shadow: 0 1px 0 #000 inset, 0 0 0 1px #21222E;
+}
+
+/* Library heading serif styling (font loaded via Google Fonts) */
+.library-heading { font-family: 'Playfair Display', Georgia, serif; letter-spacing: .5px; }
+
+/* Custom scrollbar for webkit browsers */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #24253A;
+    border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #2A2B36;
+    border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #3A3B46;
+}
+
+/* Animation for modal backdrop */
+.modal-backdrop {
+    backdrop-filter: blur(2px);
+}
+
+/* Progress bar animation */
+.progress-animation {
+    transition: width 300ms ease-in-out;
+}
+
+/* Custom focus states */
+.focus-accent:focus {
+    outline: 2px solid #5C6FFF;
+    outline-offset: 2px;
+}
+
+/* Book item styles */
+.book-item {
+    background: #24253A;
+    border: 1px solid #2A2B36;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.book-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: #5C6FFF;
+}
+
+.book-item:hover {
+    background: #2A2B36;
+    border-color: #3A3B46;
+}
+
+.book-item h4 {
+    color: #E8E9F3;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    padding-left: 8px;
+}
+
+.book-status {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-left: 8px;
+    margin-bottom: 4px;
+}
+
+.status-reading {
+    background: #C4842D;
+    color: white;
+}
+
+.status-done {
+    background: #4B7C59;
+    color: white;
+}
+
+.status-not-started {
+    background: #6B7280;
+    color: white;
+}
+
+.book-dates {
+    font-size: 0.7rem;
+    color: #A0A1AB;
+    margin-top: 4px;
+    padding-left: 8px;
+    font-style: italic;
+}
+
+.round-info {
+    background: #24253A;
+    color: #E8E9F3;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem; /* Previously 0.55rem - increased for readability */
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: .5px;
+    display: inline-block;
+    margin-bottom: 4px;
+    margin-left: 8px;
+    border: 1px solid #2A2B36;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+/* Round badge color variants (mod cycle) */
+.round-color-1 { background:#24253A; color:#5C6FFF; border-color:#334155; }
+.round-color-2 { background:#24253A; color:#4ade80; border-color:#335544; }
+.round-color-3 { background:#24253A; color:#fbbf24; border-color:#4a3412; }
+.round-color-4 { background:#24253A; color:#ec4899; border-color:#5a2846; }
+.round-color-0 { background:#24253A; color:#38bdf8; border-color:#1e3a5f; }
+
+/* History items adopt book-item base look */
+.history-item { @media (min-width:0px) { } }
+.history-item { /* reuse book styling */
+    background: #24253A;
+    border: 1px solid #2A2B36;
+    border-radius: 6px;
+    padding: 12px 12px 10px 12px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+}
+.history-item::before { content:""; position:absolute; inset:0 0 0 0; pointer-events:none; }
+.history-item h3 { color:#E8E9F3; font-size:.9rem; font-weight:600; margin-bottom:4px; padding-left:4px; }
+.history-dates { font-size:.65rem; color:#A0A1AB; font-style:italic; padding-left:4px; }
+
+/* Status icon decoration on book-item via data-status */
+.book-item[data-status="reading"]::before { background:linear-gradient(#C4842D,#C4842D); }
+.book-item[data-status="done"]::before { background:linear-gradient(#4B7C59,#4B7C59); }
+.book-item[data-status="not-started"]::before { background:linear-gradient(#6B7280,#6B7280); }
+
+.no-data {
+    text-align: center;
+    color: #A0A1AB;
+    font-size: 0.9rem;
+    padding: 20px;
+    background: #24253A;
+    border: 1px solid #2A2B36;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+    .mobile-full {
+        width: 100% !important;
+        min-width: unset !important;
+    }
+}
