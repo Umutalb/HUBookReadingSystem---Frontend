@@ -340,36 +340,40 @@ function setupMainPageEvents() {
     const updateForm = document.getElementById('update-form');
     const closeUpdateModal = document.getElementById('close-update-modal');
 
-    closeUpdateModal.addEventListener('click', function() {
-        updateModal.style.display = 'none';
-    });
-
-    updateForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        const updateData = {
-            name: document.getElementById('new-name').value || null,
-            targetCount: parseInt(document.getElementById('new-target').value) || null,
-            currentRound: parseInt(document.getElementById('new-round').value) || null
-        };
-
-        try {
-            await apiCall('PUT', `/Readers/${currentUser.id}`, updateData);
+    if (closeUpdateModal) {
+        closeUpdateModal.addEventListener('click', function() {
             updateModal.style.display = 'none';
+        });
+    }
 
-            loadAllUsersData();
+    if (updateForm) {
+        updateForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-            if (updateData.name) {
-                currentUser.name = updateData.name;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                updateUserInfo();
+            const updateData = {
+                name: document.getElementById('new-name').value || null,
+                targetCount: parseInt(document.getElementById('new-target').value) || null,
+                currentRound: parseInt(document.getElementById('new-round').value) || null
+            };
+
+            try {
+                await apiCall('PUT', `/Readers/${currentUser.id}`, updateData);
+                updateModal.style.display = 'none';
+
+                loadAllUsersData();
+
+                if (updateData.name) {
+                    currentUser.name = updateData.name;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    updateUserInfo();
+                }
+
+            } catch (error) {
+                const errorDiv = document.getElementById('update-error-message');
+                errorDiv.textContent = 'Update error: ' + (error.message || 'Unknown error');
             }
-
-        } catch (error) {
-            const errorDiv = document.getElementById('update-error-message');
-            errorDiv.textContent = 'Güncelleme hatası: ' + (error.message || 'Bilinmeyen hata');
-        }
-    });
+        });
+    }
 
     // Round confirm modal events
     const roundConfirmModal = document.getElementById('round-confirm-modal');
@@ -414,6 +418,35 @@ function setupMainPageEvents() {
     // Modal backdrop click to close
     if (roundConfirmModal) {
         roundConfirmModal.addEventListener('click', function(e) {
+            if (e.target === roundConfirmModal) {
+                hideRoundConfirmModal();
+            }
+        });
+    }
+    
+    if (roundResultModal) {
+        roundResultModal.addEventListener('click', function(e) {
+            if (e.target === roundResultModal) {
+                hideRoundResultModal();
+            }
+        });
+    }
+
+    if (deleteConfirmModal) {
+        deleteConfirmModal.addEventListener('click', function(e) {
+            if (e.target === deleteConfirmModal) {
+                hideDeleteConfirmModal();
+            }
+        });
+    }
+
+    if (infoModal) {
+        infoModal.addEventListener('click', function(e) {
+            if (e.target === infoModal) {
+                hideInfoModal();
+            }
+        });
+    }
 
     // Delegated UI actions (profile/update/add book/round)
     document.addEventListener('click', function(e) {
@@ -448,35 +481,6 @@ function setupMainPageEvents() {
             submitEditBook();
         });
     }
-            if (e.target === roundConfirmModal) {
-                hideRoundConfirmModal();
-            }
-        });
-    }
-    
-    if (roundResultModal) {
-        roundResultModal.addEventListener('click', function(e) {
-            if (e.target === roundResultModal) {
-                hideRoundResultModal();
-            }
-        });
-    }
-
-    if (deleteConfirmModal) {
-        deleteConfirmModal.addEventListener('click', function(e) {
-            if (e.target === deleteConfirmModal) {
-                hideDeleteConfirmModal();
-            }
-        });
-    }
-
-    if (infoModal) {
-        infoModal.addEventListener('click', function(e) {
-            if (e.target === infoModal) {
-                hideInfoModal();
-            }
-        });
-    }
 
     // Delegated book action buttons (toggle/edit/delete)
     document.addEventListener('click', function(e) {
@@ -499,7 +503,7 @@ function setupMainPageEvents() {
 // Kitap ekleme fonksiyonu
 async function addBook(readerId, title, startedAt = null) {
     if (!currentUser.id) { 
-        showInfoModal('warning', 'Giriş Gerekli', 'Lütfen önce giriş yapın!');
+        showInfoModal('warning', 'Login Required', 'Please log in first!');
         return false; 
     }
 
