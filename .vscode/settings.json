@@ -1,9 +1,0 @@
-{
-  "liveServer.settings.root": "/",
-  "liveServer.settings.port": 5501,
-  "liveServer.settings.useBrowserPreview": false,
-  "liveServer.settings.CustomBrowser": "Brave",
-  "liveServer.settings.ignoreFiles": ["**/.vscode/**", "**/*.tsbuildinfo"],
-  "liveServer.settings.wait": 100,
-  "css.lint.unknownAtRules": "ignore"
-}
